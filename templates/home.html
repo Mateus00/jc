@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Home | JC Moveis Industriais
+{% endblock %}
+
+{% block css_content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<style>
+  /* Animação base */
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Itens que devem animar ao entrar em viewport */
+  .animate-item {
+    opacity: 0;
+    transform: translateY(40px);
+    will-change: transform, opacity;
+  }
+  .animate-in {
+    animation: slideIn 0.6s ease forwards; /* forwards mantém visível ao fim */
+  }
+
+  body { overflow-x: hidden; }
+
+  .overlay-section { width: 100%; color: white; position: relative; padding: 5px 0; overflow: hidden; text-align: center; }
+  
+  .section-header { position: relative; width: 100vw; max-width: 100vw; margin-left: calc(-50vw + 50%); min-height: 200px; padding: 2rem 1rem; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; background-size: cover; background-position: center center; background-repeat: no-repeat; isolation: isolate; }
+  .section-header.parallax::before { content: ''; position: absolute; inset: 0; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(6px); z-index: -1; }
+
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fff; padding: 1rem; width: 100%; text-align: center; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+
+  .section-content { max-width: 1200px; padding: 1rem; color: #333; }
+  .section-content-w { background: linear-gradient(145deg, rgba(100, 109, 253, 1), rgba(13, 109, 253, 1), #00008B); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1), 4px 6px 8px rgba(0, 0, 0, 0.2); }
+  
+  .section-gradient { background: linear-gradient(180deg, #ffffffff, rgba(255, 255, 255, 1), rgba(13, 109, 253, 0.72)); background-attachment: fixed; }
+
+  .stream-carousel { position: relative; display: flex; align-items: center; }
+  .scroll-container { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 1rem; padding: 1rem 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+  .scroll-container::-webkit-scrollbar { display: none; }
+
+  .product-card { min-width: 200px; flex: 0 0 auto; background: #fff; color: #000; border-radius: 10px; padding: 1rem; box-shadow: 0 0 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; }
+  .product-card img { max-width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem; }
+
+  .scroll-btn { background-color: rgba(0,0,0,0.5); border: none; color: white; font-size: 2rem; padding: 0 12px; cursor: pointer; user-select: none; z-index: 2; }
+  .scroll-btn:hover { background-color: rgba(0,0,0,0.7); }
+
+  /* Vantagens */
+  .vantagens-carousel { display: flex; gap: 2rem; overflow-y: hidden; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; padding: 1rem 0; scrollbar-width: none; -ms-overflow-style: none; }
+  .vantagens-carousel::-webkit-scrollbar { display: none; }
+
+  .vantagem-item { flex: 0 0 auto; min-width: 280px; display: flex; align-items: center; border-radius: 12px; background: #f4f4f4; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+  .vantagem-icon { font-size: 2rem; margin-right: 1rem; }
+  .vantagem-content h5 { margin: 0; font-weight: 600; font-size: 1.1rem; }
+  .vantagem-content p { margin: 0; font-size: 0.9rem; color: #666; }
+
+  @media (min-width: 768px) { .vantagens-carousel { justify-content: center; overflow-x: hidden; } .vantagem-item { min-width: unset; width: 250px; } }
+  @media (max-width: 767px) { .vantagem-item { width: 100%; } }
+
+  .pulse-btn { animation: pulse 1.8s infinite; transition: transform 0.3s ease-in-out; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+  /* Galeria: sem animação de hover; apenas formato da imagem */
+  #galeria img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+  }
+</style>
+{% endblock %}
+
+{% block hero %}
+<div class="hero" style="background-image: url('{{ hero.imagem_fundo.url }}'); background-size: cover; background-position: center;"></div>
+{% endblock hero %}
+
+{% block content %}
+<div class="text-center">
+
+  <!-- Seção: Destaque -->
+  <section id="home" class="overlay-section section-gradient">
+    <div class="section-content mx-auto">
+      <h2 class="section-title text-center text-primary mb-4">{{ destaques.titulo }}</h2>
+      <p class="text-CENTER ps-3">{{ destaques.descricao }}</p>
+      <div class="stream-carousel">
+        <button class="scroll-btn scroll-left" onclick="scrollCarousel(this, -1)">‹</button>
+        <div class="scroll-container">
+          {% for produto in carrossel_destaques %}
+            <div class="card product-card shadow-sm animate-item">
+              <img src="{{ produto.imagem.url|default:'https://via.placeholder.com/200x160.png?text=Sem+Imagem' }}" alt="{{ produto.nome }}">
+              <div class="card-body p-2 d-flex flex-column justify-content-between">
+                <h6 class="card-title text-truncate">{{ produto.nome }}</h6>
+                <p class="card-text text-muted small text-truncate">{{ produto.descricao|truncatewords:10 }}</p>
+                <p class="mb-1"><span class="text-success fw-bold">R$ {{ produto.preco }}</span></p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="scroll-btn scroll-right" onclick="scrollCarousel(this, 1)">›</button>
+      </div>
+    </div>
+  </section>
+      
+  <!-- Carrossel de Vantagens -->
+  <section class="overlay-section section-gradient">
+    <div class="section-content mx-auto">
+      <div class="vantagens-carousel mb-4">
+        <div class="vantagem-item animate-item"><i class="bi bi-truck text-primary vantagem-icon"></i><div class="vantagem-content"><h5 class="text-primary">Frete Grátis</h5><p>Para algumas regiões, confira no carrinho!</p></div></div>
+        <div class="vantagem-item animate-item"><i class="bi bi-credit-card text-primary vantagem-icon"></i><div class="vantagem-content"><h5 class="text-primary">Parcelamento</h5><p>Em até 10x sem juros</p></div></div>
+        <div class="vantagem-item animate-item"><i class="bi bi-cash text-primary vantagem-icon"></i><div class="vantagem-content"><h5 class="text-primary">12% de Desconto</h5><p>Pagamento à vista</p></div></div>
+        <div class="vantagem-item animate-item"><i class="bi bi-shield-lock text-primary vantagem-icon"></i><div class="vantagem-content"><h5 class="text-primary">Certificado SSL</h5><p>Compra 100% segura</p></div></div>
+      </div>
+    </div>
+  </section>
+    
+  <!-- Seção: Imagem 
+  <section id="imagem" class="overlay-section section-gradient">
+    <div class="section-content section-content-w text-center mx-auto p4" style="background: radial-gradient(circle at center, rgba(13, 109, 253, 0.65), rgba(13, 109, 253, 1));">
+      <h3 class="section-title">{{ qualidade.descricao }}</h3>
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0 animate-item">
+          <img class="img-fluid rounded shadow" src="{{ qualidade.imagem_centro.url }}">
+        </div>
+        <div class="col-md-6 mb-4 mb-md-0 animate-item">
+          <img class="img-fluid rounded shadow" src="{{ qualidade.imagem_fundo.url }}">
+        </div>
+      </div>
+    </div>
+  </section>-->
+    
+  <!-- Seção: Banner -->
+  <section id="banner" class="overlay-section section-gradient">
+    <div class="section-header parallax" style="background-image: url('{{ banner.imagem_fundo.url }}');">
+      <h3 class="section-title">{{ banner.descricao }}</h3>
+    </div>
+  </section>
+
+  <!-- Seção: Galeria de Imagens -->
+  <section id="galeria" class="overlay-section section-gradient py-5">
+    <div class="section-content section-content-w text-center mx-auto p4">
+      <h3 class="section-title text-center mb-4">Nossa Galeria</h3>
+      <div class="container">
+        <div class="row g-3">
+          {% for imagem in galeria %}
+            <div class="col-12 col-md-4 mx-auto animate-item">
+              {% if imagem.imagem %}
+                <img src="{{ imagem.imagem.url }}" alt="{{ imagem.titulo|default:'Imagem' }}" class="img-fluid rounded">
+              {% else %}
+                <img src="https://via.placeholder.com/400x300.png?text=Sem+Imagem" alt="Sem imagem" class="img-fluid rounded">
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção: Projetos com carrosséis -->
+  {% include 'marcenaria/home_projetos.html' %}
+
+  <!-- Seções Sobre e Contato -->
+  {% include 'marcenaria/home_sobre_contato.html' %}
+  
+  <!-- Seção solicite o orçamento -->
+  {% include 'marcenaria/solicite_um_orcamento.html' %}
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const items = Array.from(document.querySelectorAll('.animate-item'));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const el = entry.target;
+
+        if (entry.isIntersecting) {
+          // delay em “cascata” baseado no índice fixo do elemento na página
+          const idx = items.indexOf(el);
+          el.style.animationDelay = ((idx % 10) * 0.08) + 's';
+
+          el.classList.add('animate-in');     // anima e mantém visível
+        } else {
+          // saiu da viewport: reseta para poder animar de novo na próxima entrada
+          el.classList.remove('animate-in');
+          el.style.animationDelay = '0s';
+          // Mantém o estado inicial (opacity 0/translateY) através da classe .animate-item
+        }
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -10% 0px" });
+
+    items.forEach(el => observer.observe(el));
+  });
+
+  function scrollCarousel(button, direction) {
+    const carousel = button.parentElement.querySelector('.scroll-container');
+    const scrollAmount = 220;
+    carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.section-header.parallax').forEach(el => {
+      const speed = 0.3;
+      const offset = Math.max(Math.min(el.getBoundingClientRect().top * speed, 80), -80);
+      el.style.backgroundPosition = `center calc(50% + ${offset}px)`;
+    });
+  });
+</script>
+{% endblock %}

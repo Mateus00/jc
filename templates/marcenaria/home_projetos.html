@@ -1,0 +1,30 @@
+<!-- Seção: Projetos com carrosséis -->
+<section id="projetos" class="overlay-section section-gradient">
+    <div class="section-header parallax" style="background-image: url('{{ projetos.imagem_fundo.url }}');">
+      <h2 class="section-title animate-item">{{ projetos.titulo }}</h2>
+      <p>{{ projetos.descricao }}</p>
+    </div>
+    <div class="section-content section-content-w mx-auto my-4">
+      {% for carrossel in carrosseis %}
+        <div class="my-5">
+          <h2 class="section-title text-center mb-4">{{ carrossel.titulo }}</h2>
+          <div class="stream-carousel">
+            <button class="scroll-btn scroll-left" onclick="scrollCarousel(this, -1)">‹</button>
+            <div class="scroll-container">
+              {% for produto in carrossel.produtos %}
+                <div class="card product-card shadow-sm animate-item">
+                  <img src="{{ produto.imagem.url|default:'https://via.placeholder.com/200x160.png?text=Sem+Imagem' }}" alt="{{ produto.nome }}">
+                  <div class="card-body p-2 d-flex flex-column justify-content-between">
+                    <h6 class="card-title text-truncate">{{ produto.nome }}</h6>
+                    <p class="card-text text-muted small text-truncate">{{ produto.descricao|truncatewords:10 }}</p>
+                    <p class="mb-1"><span class="text-primary fw-bold">R$ {{ produto.preco }}</span></p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="scroll-btn scroll-right" onclick="scrollCarousel(this, 1)">›</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>

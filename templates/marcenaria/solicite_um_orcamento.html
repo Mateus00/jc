@@ -1,0 +1,25 @@
+<!-- Seção: Solicite um Orçamento -->
+  <section id="orcamento" class="solicite-orcamento py-4 text-center text-light section-gradient">
+    <div class="solicite-container my-4 mx-auto p-4 animate-item" style="max-width: 90%; background-color: rgb(33, 37, 41); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <h2 class="mb-3" style="font-size:26px; font-weight:bold;">SOLICITE UM ORÇAMENTO</h2>
+      <p class="mb-4" style="font-size:14px;">Preencha abaixo que entraremos em contato!</p>
+      <form method="post" action="{% url 'contato' %}" class="solicite-form d-flex flex-column align-items-center">
+        {% csrf_token %}
+        <div class="row w-100 mb-3 text-start">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" class="form-control" placeholder="Seu nome" required>
+          </div>
+          <div class="col-md-6">
+            <label for="whatsapp">Whatsapp com DDD</label>
+            <input type="text" name="whatsapp" id="whatsapp" class="form-control" placeholder="(99) 99999-9999" required>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Seu email" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-warning animate-item">ENVIAR</button>
+      </form>
+    </div>
+  </section>

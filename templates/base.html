@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Home | JC Moveis Industriais{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet" />
+
+    <!-- Estilo personalizado -->
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f4f0; 
+            color: #333;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            transition: background-color 0.4s ease, padding 0.4s ease;
+            padding: 1rem 1rem;
+        }
+        .navbar-transparent {
+            background-color: transparent !important;
+        }
+        .navbar-scrolled {
+            background: linear-gradient(90deg, #00008B, rgba(0, 0, 0, 1)) !important;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif; /* Mantém a identidade da marca */
+            font-weight: 500;
+            font-size: 1rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .navbar-brand img {
+            height: 35px;
+            margin-right: 8px;
+        }
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            color: #f0c14b;
+        }
+
+        .navbar-nav .nav-link {
+            margin-left: 1rem;
+            position: relative;
+            font-weight: 600; /* Deixa links mais fortes */
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 0%;
+            height: 2px;
+            background-color: #f0c14b;
+            transition: width 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #f0c14b;
+        }
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+        .navbar-nav .btn-cta {
+            margin-left: 1rem;
+            background-color: #f0c14b;
+            color: #212529;
+            font-weight: 700;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .navbar-nav .btn-cta:hover {
+            background-color: #ddb347;
+            transform: scale(1.05);
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            width: 100vw;  
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: white;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            margin: 0;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #00008B, rgba(0, 0, 0, 1)) !important;
+            color: #eee;
+            font-family: 'Montserrat', sans-serif;
+        }
+        footer a {
+            color: #eee;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+        }
+        footer a:hover {
+            color: #f0c14b;
+            transform: translateY(-3px);
+        }
+    </style>
+
+    {% block css_content %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top navbar-transparent">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{{ logo.logo.url }}" alt="{{ logo.nome }}">
+                JC Moveis Industriais
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#projetos">Projetos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sobre">Sobre Nós</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+                    <li class="nav-item">
+                        <a href="#orcamento" class="btn btn-cta">Solicite Orçamento</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Banner -->
+    <header class="hero text-center">
+        {% block hero %}{% endblock hero %}
+    </header>
+
+    <!-- Conteúdo dinâmico -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="py-3">
+        <div class="container text-center">
+            <p class="mb-1">&copy; 2025 JC Moveis Industriais. Todos os direitos reservados.</p>
+            <p>
+                <a href="https://wa.me/5511999999999" target="_blank">WhatsApp</a> |
+                <a href="https://www.instagram.com/sua_marcenaria" target="_blank">Instagram</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Scroll suave + Navbar transparente -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Scroll suave
+        const navLinks = document.querySelectorAll('.navbar-nav a[href^="#"]');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    const yOffset = -60;
+                    const yPosition = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: yPosition, behavior: "smooth" });
+                }
+                // Fecha menu colapsado em telas pequenas
+                const navbarToggler = document.querySelector('.navbar-toggler');
+                const navbarCollapse = document.getElementById('navbarNav');
+                if (window.getComputedStyle(navbarToggler).display !== 'none' && navbarCollapse.classList.contains('show')) {
+                    navbarToggler.click();
+                }
+            });
+        });
+
+        // Navbar transparente ao scroll
+        const navbar = document.querySelector('.navbar');
+        const heroHeight = document.querySelector('.hero').offsetHeight;
+
+        const toggleNavbar = () => {
+            if (window.scrollY >= heroHeight - 80) {
+                navbar.classList.remove('navbar-transparent');
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.add('navbar-transparent');
+                navbar.classList.remove('navbar-scrolled');
+            }
+        };
+
+        toggleNavbar(); // inicializa no carregamento
+        window.addEventListener('scroll', toggleNavbar);
+    });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
