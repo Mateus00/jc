@@ -26,7 +26,10 @@ SECRET_KEY = "django-insecure-o$1ey37(!x%b@zq)th8e7d)_1ngon%j_hdl9xo3^e4324p!*$r
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    'https://mlewin.pythonanywhere.com',
+    'https://www.mlewin.pythonanywhere.com'
+]
 
 
 # Application definition
