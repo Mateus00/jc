@@ -5,15 +5,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-o$1ey37(!x%b@zq)th8e7d)_1ngon%j_hdl9xo3^e4324p!*$r"
 
-# Em produção SEMPRE False
-DEBUG = False
+# Em produção: False / Local: True
+DEBUG = True  # altere para False no PythonAnywhere
 
-# Seu domínio no PythonAnywhere
-ALLOWED_HOSTS = ["mlewin.pythonanywhere.com"]
+# Hosts permitidos
+if DEBUG:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+else:
+    ALLOWED_HOSTS = ["mlewin.pythonanywhere.com"]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://mlewin.pythonanywhere.com',
-]
+# CSRF Trusted Origins
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = []
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        "https://mlewin.pythonanywhere.com",
+    ]
 
 # Apps
 INSTALLED_APPS = [
@@ -55,7 +62,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "marcenaria.wsgi.application"
 
-# Banco (SQLite serve no PythonAnywhere para projetos pequenos)
+# Banco
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -79,11 +86,17 @@ USE_TZ = True
 
 # Arquivos estáticos
 STATIC_URL = '/static/'
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / "static"] if DEBUG else []
 
 # Arquivos de mídia (uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Para servir mídia localmente em debug
+if DEBUG:
+    from django.conf import settings
+    from django.conf.urls.static import static
+    urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
